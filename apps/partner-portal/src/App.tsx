@@ -11,6 +11,9 @@ import QuickOrder from './pages/QuickOrder';
 import MyOrders from './pages/MyOrders';
 import { useCart } from './lib/cart';
 import ThemeToggle from './components/ThemeToggle';
+import LandingBackdrop from './components/LandingBackdrop';
+
+export const LANDING_BG = 'https://files.zite.com/orgid-811092/base-e9ed7799171d5ba9/fieldid-fpTxbibVgbh/oarGTk6CaSUpqzkxCxxmdC/gshock-landing-bg.webp';
 
 const LOGO = 'https://images.fillout.com/orgid-875710/flowpublicid-cruasebupv/widgetid-default/xf69MFSoK1nkWDgsfckrRV/G-Shock-Vapes-Logo.png';
 
@@ -55,14 +58,18 @@ function Nav() {
 
 function Pages() {
   const location = useLocation();
+  const landing = location.pathname === '/';
   return (
-    <main key={location.pathname} className="animate-rise max-w-7xl mx-auto px-4 sm:px-8 py-8">
+    <>
+    <LandingBackdrop src={LANDING_BG} position="18% center" opacity={0.1} />
+    <main key={location.pathname} className={`animate-rise max-w-7xl mx-auto px-4 sm:px-8 py-8 ${landing ? 'landing' : ''}`}>
       <Routes>
         <Route path="/" element={<Catalog />} />
         <Route path="/quick-order" element={<QuickOrder />} />
         <Route path="/orders" element={<MyOrders />} />
       </Routes>
     </main>
+    </>
   );
 }
 
@@ -77,14 +84,17 @@ export default function App() {
 
   if (isLoading || !user || company === undefined)
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-6">
+        <LandingBackdrop src={LANDING_BG} position="18% center" />
+        <Brand />
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
 
   if (!company)
     return (
-      <div className="min-h-screen px-4 py-10">
+      <div className="landing min-h-screen px-4 py-10">
+        <LandingBackdrop src={LANDING_BG} position="18% center" />
         <div className="mb-6 flex justify-center"><Brand /></div>
         <CompanySetup email={user.email} onDone={loadCompany} />
         <Toaster />

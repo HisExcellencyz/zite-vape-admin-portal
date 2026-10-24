@@ -112,6 +112,7 @@ export default function Catalog() {
       </div>
       </div>
       </div>
+      <div aria-hidden className="h-[18vh] sm:h-[26vh]" />
       <div className={view === 'grid' ? 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2.5' : 'space-y-2'}>
         {!data && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className={view === 'grid' ? 'h-60 rounded-lg' : 'h-16 rounded-lg'} />)}
         {filtered.map((p) => (

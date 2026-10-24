@@ -34,7 +34,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="xl:col-span-2 bg-card border border-border rounded-lg p-4">
-          <div className="text-sm font-medium mb-3">Monthly profit & loss</div>
+          <div className="section-title text-sm font-semibold mb-3">Monthly profit & loss</div>
           {!data ? <Skeleton className="h-72" /> : data.monthly.length === 0 ? <div className="h-72 flex items-center justify-center text-sm text-muted-foreground">No transactions in this period.</div> : (
             <ResponsiveContainer width="100%" height={288}>
               <ComposedChart data={data.monthly}>
@@ -53,7 +53,7 @@ export default function Dashboard() {
         </div>
         <div className="bg-card border border-border rounded-lg p-4 space-y-4">
           <div>
-            <div className="text-sm font-medium mb-2">Top products</div>
+            <div className="section-title text-sm font-semibold mb-2">Top products</div>
             {!data ? <Skeleton className="h-28" /> : data.topProducts.length === 0 ? <p className="text-sm text-muted-foreground">No sales yet.</p> : data.topProducts.map((p) => (
               <div key={p.name} className="flex justify-between text-sm py-1 border-b border-border last:border-0">
                 <span className="truncate mr-2">{p.name} <span className="text-muted-foreground">×{p.qty}</span></span>
@@ -62,7 +62,7 @@ export default function Dashboard() {
             ))}
           </div>
           <div>
-            <div className="text-sm font-medium mb-2">Expenses by category</div>
+            <div className="section-title text-sm font-semibold mb-2">Expenses by category</div>
             {!data ? <Skeleton className="h-28" /> : data.expenseByCategory.length === 0 ? <p className="text-sm text-muted-foreground">No expenses logged.</p> : (
               <ResponsiveContainer width="100%" height={Math.max(80, data.expenseByCategory.length * 30)}>
                 <BarChart data={data.expenseByCategory} layout="vertical" margin={{ left: 10 }}>

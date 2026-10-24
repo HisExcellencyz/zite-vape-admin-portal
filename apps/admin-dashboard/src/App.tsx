@@ -16,8 +16,10 @@ import Expenses from './pages/Expenses';
 import RoutePlan from './pages/RoutePlan';
 import ThemeToggle from './components/ThemeToggle';
 import ArchiveButton from './components/ArchiveButton';
+import LandingBackdrop from './components/LandingBackdrop';
 
 export const LOGO = 'https://images.fillout.com/orgid-875710/flowpublicid-cruasebupv/widgetid-default/xf69MFSoK1nkWDgsfckrRV/G-Shock-Vapes-Logo.png';
+const BACKDROP = 'https://files.zite.com/orgid-811092/base-e9ed7799171d5ba9/fieldid-fpTxbibVgbh/oarGTk6CaSUpqzkxCxxmdC/gshock-landing-bg.webp';
 
 const groups = [
   { title: 'Overview', items: [
@@ -112,6 +114,7 @@ function Shell() {
   const toggle = () => setCollapsed((c) => { localStorage.setItem('sidebar-collapsed', c ? '0' : '1'); return !c; });
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
+      <LandingBackdrop src={BACKDROP} position="18% center" opacity={0.1} />
       <Sidebar collapsed={collapsed} onCollapse={toggle} />
       <main data-tone={toneFor(location.pathname)} className="flex-1 p-4 md:p-8 min-w-0">
         <div key={location.pathname} className="animate-rise">
