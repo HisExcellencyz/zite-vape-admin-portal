@@ -1,0 +1,15 @@
+{
+  "id": "bpis7zhx6u",
+  "accessMode": "internal",
+  "integrationSettings": {
+    "googlesheets": {
+      "spreadsheet": "1wEMiVrXYL4yhqbH85L7oqI_psyr4N9QDjAn8llYNp6o"
+    }
+  },
+  "seoSettings": {
+    "title": "G-Shock Vapes Admin",
+    "description": "G-Shock Vapes Admin",
+    "thumbnailUrl": "https://images.fillout.com/orgid-875710/flowpublicid-cruasebupv/widgetid-default/nP9tEn7fnQE8DcmbibuETy/G-Shock-Vapes-Coverpic.png",
+    "faviconUrl": "https://images.fillout.com/orgid-875710/flowpublicid-cruasebupv/widgetid-default/xf69MFSoK1nkWDgsfckrRV/G-Shock-Vapes-Logo.png"
+  }
+}

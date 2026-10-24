@@ -1,0 +1,719 @@
+{
+  "tables": [
+    {
+      "id": "teoeGXNg84V",
+      "sdkName": "customers",
+      "name": "Customers",
+      "primaryFieldId": "ft9SMjiTit3",
+      "fields": [
+        {
+          "id": "ft9SMjiTit3",
+          "sdkName": "companyName",
+          "definition": {
+            "name": "Company Name",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "f6TsLwA9Ku3",
+          "sdkName": "contactEmail",
+          "definition": {
+            "name": "Contact Email",
+            "type": "email",
+            "template": {}
+          }
+        },
+        {
+          "id": "fcK4jxzqnfi",
+          "sdkName": "tierLevel",
+          "definition": {
+            "name": "Tier Level",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "a5r8",
+                  "label": "Tier A",
+                  "color": "purple"
+                },
+                {
+                  "value": "iWEa",
+                  "label": "Tier B",
+                  "color": "orange"
+                },
+                {
+                  "value": "jMMq",
+                  "label": "Standard",
+                  "color": "blue"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "fnSQVYnK5sS",
+          "sdkName": "shippingAddress",
+          "definition": {
+            "name": "Shipping Address",
+            "type": "long_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "ftj8CR4xKjQ",
+          "sdkName": "totalBalance",
+          "definition": {
+            "name": "Total Balance",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fkSLMdBm3sc",
+          "sdkName": "portalUsers",
+          "definition": {
+            "name": "Portal Users",
+            "type": "user",
+            "template": {
+              "internalOnly": false,
+              "allowMultiple": true,
+              "deleteRowWhenUserDeleted": false
+            }
+          }
+        },
+        {
+          "id": "fmn6uKzfjsC",
+          "sdkName": "latitude",
+          "definition": {
+            "name": "Latitude",
+            "type": "number",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 6
+            }
+          }
+        },
+        {
+          "id": "fbS6vAjM6b7",
+          "sdkName": "longitude",
+          "definition": {
+            "name": "Longitude",
+            "type": "number",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 6
+            }
+          }
+        },
+        {
+          "id": "faeSfSY5az2",
+          "sdkName": "plusCode",
+          "definition": {
+            "name": "Plus Code",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fv4QMS9YxeE",
+          "sdkName": "phone",
+          "definition": {
+            "name": "Phone",
+            "type": "phone_number",
+            "template": {}
+          }
+        },
+        {
+          "id": "fozELZ4j3f4",
+          "sdkName": "orders",
+          "definition": {
+            "name": "Orders",
+            "type": "linked_record",
+            "template": {
+              "tableId": "tok5b5JZ77C",
+              "isInverse": true,
+              "allowMultiple": true,
+              "inverseFieldId": "fc7qJd9rjmL"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tc7Z2t518LT",
+      "sdkName": "products",
+      "name": "Products",
+      "primaryFieldId": "fiRjHcqefXM",
+      "fields": [
+        {
+          "id": "fiRjHcqefXM",
+          "sdkName": "sku",
+          "definition": {
+            "name": "SKU",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "f8HetMBbynZ",
+          "sdkName": "productName",
+          "definition": {
+            "name": "Product Name",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fuCF9rFVCmL",
+          "sdkName": "category",
+          "definition": {
+            "name": "Category",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fpTxbibVgbh",
+          "sdkName": "image",
+          "definition": {
+            "name": "Image",
+            "type": "attachments",
+            "template": {}
+          }
+        },
+        {
+          "id": "fjvbSLb5qo9",
+          "sdkName": "basePrice",
+          "definition": {
+            "name": "Base Price",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fhTT23cVfYJ",
+          "sdkName": "stockLevel",
+          "definition": {
+            "name": "Stock Level",
+            "type": "number",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 1
+            }
+          }
+        },
+        {
+          "id": "fwXuZefoX67",
+          "sdkName": "availabilityStatus",
+          "definition": {
+            "name": "Availability Status",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "qU5h",
+                  "label": "Available",
+                  "color": "purple"
+                },
+                {
+                  "value": "p7nJ",
+                  "label": "Discontinued",
+                  "color": "orange"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "fkyFR4EvPx6",
+          "sdkName": "costPrice",
+          "definition": {
+            "name": "Cost Price",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "f9BJZYrcHvT",
+          "sdkName": "rrp",
+          "definition": {
+            "name": "RRP",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fhx2HWEiD3Z",
+          "sdkName": "orderItems",
+          "definition": {
+            "name": "Order Items",
+            "type": "linked_record",
+            "template": {
+              "tableId": "t6hUuMCijcd",
+              "isInverse": true,
+              "allowMultiple": true,
+              "inverseFieldId": "foW8JGhfq3e"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tok5b5JZ77C",
+      "sdkName": "orders",
+      "name": "Orders",
+      "primaryFieldId": "ftToVzJ1if3",
+      "fields": [
+        {
+          "id": "ftToVzJ1if3",
+          "sdkName": "orderId",
+          "definition": {
+            "name": "Order ID",
+            "type": "autonumber",
+            "template": {}
+          }
+        },
+        {
+          "id": "fd8eEHiBi6w",
+          "sdkName": "datePlaced",
+          "definition": {
+            "name": "Date Placed",
+            "type": "datetime",
+            "template": {
+              "timezone": "",
+              "dateFormat": "local",
+              "timeFormat": "12h",
+              "displayTimeZone": false
+            }
+          }
+        },
+        {
+          "id": "f28yaagnacC",
+          "sdkName": "totalValue",
+          "definition": {
+            "name": "Total Value",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "ft3SaP2uM6L",
+          "sdkName": "orderStatus",
+          "definition": {
+            "name": "Order Status",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "wve5",
+                  "label": "Draft",
+                  "color": "purple"
+                },
+                {
+                  "value": "4s8v",
+                  "label": "Submitted",
+                  "color": "orange"
+                },
+                {
+                  "value": "kD8L",
+                  "label": "Awaiting Deposit",
+                  "color": "blue"
+                },
+                {
+                  "value": "bohR",
+                  "label": "Processing",
+                  "color": "gray"
+                },
+                {
+                  "value": "kuox",
+                  "label": "Completed",
+                  "color": "red"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "fkfv3QQ8pxX",
+          "sdkName": "trackingNumber",
+          "definition": {
+            "name": "Tracking Number",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fc7qJd9rjmL",
+          "sdkName": "customer",
+          "definition": {
+            "name": "Customer",
+            "type": "linked_record",
+            "template": {
+              "tableId": "teoeGXNg84V",
+              "isInverse": false,
+              "allowMultiple": true,
+              "inverseFieldId": "fozELZ4j3f4"
+            }
+          }
+        },
+        {
+          "id": "fgobh8u7iEJ",
+          "sdkName": "orderItems",
+          "definition": {
+            "name": "Order Items",
+            "type": "linked_record",
+            "template": {
+              "tableId": "t6hUuMCijcd",
+              "isInverse": true,
+              "allowMultiple": true,
+              "inverseFieldId": "fchxSwSFhH9"
+            }
+          }
+        },
+        {
+          "id": "fprAZK2XZUr",
+          "sdkName": "payments",
+          "definition": {
+            "name": "Payments",
+            "type": "linked_record",
+            "template": {
+              "tableId": "t8rk62DeUv8",
+              "isInverse": true,
+              "allowMultiple": true,
+              "inverseFieldId": "fjrUhu5DkPC"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "t6hUuMCijcd",
+      "sdkName": "orderItems",
+      "name": "Order Items",
+      "primaryFieldId": "fwNTW8Pjnqb",
+      "fields": [
+        {
+          "id": "fwNTW8Pjnqb",
+          "sdkName": "lineLabel",
+          "definition": {
+            "name": "Line Label",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "f99CFQThP9m",
+          "sdkName": "quantity",
+          "definition": {
+            "name": "Quantity",
+            "type": "number",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 1
+            }
+          }
+        },
+        {
+          "id": "f1vHfdpm1zD",
+          "sdkName": "unitPrice",
+          "definition": {
+            "name": "Unit Price",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fchxSwSFhH9",
+          "sdkName": "order",
+          "definition": {
+            "name": "Order",
+            "type": "linked_record",
+            "template": {
+              "tableId": "tok5b5JZ77C",
+              "isInverse": false,
+              "allowMultiple": true,
+              "inverseFieldId": "fgobh8u7iEJ"
+            }
+          }
+        },
+        {
+          "id": "foW8JGhfq3e",
+          "sdkName": "product",
+          "definition": {
+            "name": "Product",
+            "type": "linked_record",
+            "template": {
+              "tableId": "tc7Z2t518LT",
+              "isInverse": false,
+              "allowMultiple": true,
+              "inverseFieldId": "fhx2HWEiD3Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "t8rk62DeUv8",
+      "sdkName": "payments",
+      "name": "Payments",
+      "primaryFieldId": "f73t3RSf2ze",
+      "fields": [
+        {
+          "id": "f73t3RSf2ze",
+          "sdkName": "reference",
+          "definition": {
+            "name": "Reference",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fdUG2EnLmsE",
+          "sdkName": "amountPaid",
+          "definition": {
+            "name": "Amount Paid",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fcZbJRszcwr",
+          "sdkName": "paymentDate",
+          "definition": {
+            "name": "Payment Date",
+            "type": "date",
+            "template": {
+              "dateFormat": "local"
+            }
+          }
+        },
+        {
+          "id": "fu37DxVt2cB",
+          "sdkName": "paymentMethod",
+          "definition": {
+            "name": "Payment Method",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "pjQw",
+                  "label": "Bank Transfer",
+                  "color": "purple"
+                },
+                {
+                  "value": "c8KE",
+                  "label": "Mobile Money",
+                  "color": "orange"
+                },
+                {
+                  "value": "jsqo",
+                  "label": "Card",
+                  "color": "blue"
+                },
+                {
+                  "value": "mqWB",
+                  "label": "Cash",
+                  "color": "gray"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "faGZqVyvQwm",
+          "sdkName": "paymentStatus",
+          "definition": {
+            "name": "Payment Status",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "vWmG",
+                  "label": "Unpaid",
+                  "color": "purple"
+                },
+                {
+                  "value": "8Vku",
+                  "label": "Deposit Made",
+                  "color": "orange"
+                },
+                {
+                  "value": "n4HA",
+                  "label": "Fully Paid",
+                  "color": "blue"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "fjrUhu5DkPC",
+          "sdkName": "order",
+          "definition": {
+            "name": "Order",
+            "type": "linked_record",
+            "template": {
+              "tableId": "tok5b5JZ77C",
+              "isInverse": false,
+              "allowMultiple": true,
+              "inverseFieldId": "fprAZK2XZUr"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tu7VJathkT6",
+      "sdkName": "expenses",
+      "name": "Expenses",
+      "primaryFieldId": "fjq5uZCWEAt",
+      "fields": [
+        {
+          "id": "fjq5uZCWEAt",
+          "sdkName": "description",
+          "definition": {
+            "name": "Description",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "fvTgot4GSmU",
+          "sdkName": "amount",
+          "definition": {
+            "name": "Amount",
+            "type": "currency",
+            "template": {
+              "numberFormat": "local",
+              "decimalPlaces": 2,
+              "currencySymbol": "KES"
+            }
+          }
+        },
+        {
+          "id": "fdFKFn2Gd26",
+          "sdkName": "expenseDate",
+          "definition": {
+            "name": "Expense Date",
+            "type": "date",
+            "template": {
+              "dateFormat": "local"
+            }
+          }
+        },
+        {
+          "id": "fmSgzn8JASi",
+          "sdkName": "category",
+          "definition": {
+            "name": "Category",
+            "type": "single_select",
+            "template": {
+              "options": [
+                {
+                  "value": "sf7X",
+                  "label": "Rent",
+                  "color": "purple"
+                },
+                {
+                  "value": "6DZz",
+                  "label": "Salaries",
+                  "color": "orange"
+                },
+                {
+                  "value": "wwnB",
+                  "label": "Transport",
+                  "color": "blue"
+                },
+                {
+                  "value": "a48d",
+                  "label": "Utilities",
+                  "color": "gray"
+                },
+                {
+                  "value": "7MzU",
+                  "label": "Marketing",
+                  "color": "red"
+                },
+                {
+                  "value": "gebG",
+                  "label": "Other",
+                  "color": "yellow"
+                }
+              ],
+              "disableColors": false
+            }
+          }
+        },
+        {
+          "id": "fxj2Nkx7yPi",
+          "sdkName": "notes",
+          "definition": {
+            "name": "Notes",
+            "type": "long_text",
+            "template": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "tpk6dBY5U5g",
+      "sdkName": "productCategories",
+      "name": "Product Categories",
+      "primaryFieldId": "fqsrSrgh7Bx",
+      "fields": [
+        {
+          "id": "fqsrSrgh7Bx",
+          "sdkName": "name",
+          "definition": {
+            "name": "Name",
+            "type": "single_line_text",
+            "template": {}
+          }
+        },
+        {
+          "id": "f6SHaEcVdBJ",
+          "sdkName": "description",
+          "definition": {
+            "name": "Description",
+            "type": "long_text",
+            "template": {}
+          }
+        }
+      ]
+    }
+  ]
+}

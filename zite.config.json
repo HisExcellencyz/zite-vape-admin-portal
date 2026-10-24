@@ -1,0 +1,10 @@
+{
+  "project": {
+    "name": "Distributor Portal",
+    "basePublicIdentifier": "e9ed7799171d5ba9"
+  },
+  "integrations": {
+    "googlesheets": { "type": "googlesheets", "connectionId": "svc_518172" },
+    "googlemaps": { "type": "googlemaps", "connectionId": "svc_532552" }
+  }
+}
