@@ -76,7 +76,7 @@ export default function Pipeline() {
           </>) : <StatSkeletons n={3} />}>
           <ImportButton label="Import" templateName="orders" onRows={doImport}
             columns={['Order Ref', 'Customer Email', 'Date', 'Status', 'SKU', 'Quantity', 'Unit Price']}
-            hint="One row per product line; rows sharing an Order Ref become one order. Status: Submitted, Awaiting Deposit, Processing or Completed. Leave Unit Price blank to use the selling price."
+            hint="One row per product (SKU); rows sharing an Order Ref become one order. Status: Submitted, Awaiting Deposit, Processing or Completed. Leave Unit Price blank to use the selling price."
             sampleRows={[
               { 'Order Ref': 'A1', 'Customer Email': 'buyer@example.co.ke', Date: '2026-10-01', Status: 'Submitted', SKU: 'GS-001', Quantity: 10, 'Unit Price': '' },
               { 'Order Ref': 'A1', 'Customer Email': 'buyer@example.co.ke', Date: '2026-10-01', Status: 'Submitted', SKU: 'GS-002', Quantity: 5, 'Unit Price': 900 },
