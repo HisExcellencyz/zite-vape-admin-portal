@@ -113,7 +113,7 @@ export default function SimpleTable<T extends { id: string }>({ rows, cols, load
             <div key={r.id} onClick={() => onOpen?.(r)} className={`tile bg-card border border-border rounded-lg flex flex-col ${image ? 'p-2 gap-1 text-xs' : 'p-3 gap-2 text-sm'} ${onOpen ? 'cursor-pointer' : ''}`}>
               {image && (
                 <div className="aspect-[64/45] rounded-md bg-muted overflow-hidden flex items-center justify-center">
-                  {image(r) ? <img src={image(r)!} className="w-full h-full object-cover" /> : <Package className="h-8 w-8 text-muted-foreground/50" />}
+                  {image(r) ? <img src={image(r)!} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <Package className="h-8 w-8 text-muted-foreground/50" />}
                 </div>
               )}
               <div className="font-medium">{cell(r, cols[0])}</div>

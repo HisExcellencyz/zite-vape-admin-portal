@@ -9,8 +9,10 @@ export default createEndpoint({
   inputSchema: z.object({}),
   outputSchema: z.object({}),
   execute: async ({ context }) => {
-    const customer = await getCustomerForUser(context.user);
-    const { records } = await zite.products.findAll({ limit: 2000 });
+    const [customer, { records }] = await Promise.all([
+      getCustomerForUser(context.user),
+      zite.products.findAll({ limit: 2000 }),
+    ]);
     const products = records
       .map((p) => {
         const base = p.basePrice ?? 0;

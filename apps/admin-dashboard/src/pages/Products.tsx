@@ -37,7 +37,7 @@ function ImageField({ value, onChange }: { value: string; onChange: (v: string) 
   return (
     <div className="flex items-start gap-3 mt-1">
       <div className="relative h-16 w-16 shrink-0 rounded bg-muted overflow-hidden flex items-center justify-center">
-        {isUploading ? <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /> : value ? <img src={value} className="h-full w-full object-cover" /> : <Package className="h-5 w-5 text-muted-foreground" />}
+        {isUploading ? <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /> : value ? <img src={value} loading="lazy" decoding="async" className="h-full w-full object-cover" /> : <Package className="h-5 w-5 text-muted-foreground" />}
         {value && !isUploading && <button type="button" onClick={() => onChange('')} className="absolute top-0.5 right-0.5 rounded-full bg-background/80 p-0.5"><X className="h-3 w-3" /></button>}
       </div>
       <div className="flex-1 space-y-2">

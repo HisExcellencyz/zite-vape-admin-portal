@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCatalog, getDraft, saveOrder, GetCatalogOutputType } from 'zitejs/api';
+import { getDraft, saveOrder, GetCatalogOutputType } from 'zitejs/api';
+import { loadCatalog, clearCatalog } from '../lib/catalogCache';
 import { Input } from '@project/components/ui/input';
 import { Button } from '@project/components/ui/button';
 import { Skeleton } from '@project/components/ui/skeleton';
@@ -19,7 +20,7 @@ export default function QuickOrder() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Promise.all([getCatalog({}), getDraft({})])
+    Promise.all([loadCatalog(), getDraft({})])
       .then(([cat, draft]) => {
         setData(cat);
         if (Object.keys(cart).length === 0 && Object.keys(draft.items).length) setCart(draft.items);
@@ -49,6 +50,7 @@ export default function QuickOrder() {
     try {
       const res = await saveOrder({ submit, items: lines.map(([productId, quantity]) => ({ productId, quantity })) });
       if (submit) {
+        clearCatalog();
         setCart({});
         toast.success(`Order ${orderCode(res.orderId ?? 0)} submitted`);
         navigate('/orders');

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getMyCompany, GetMyCompanyOutputType } from 'zitejs/api';
+import { loadCatalog } from './lib/catalogCache';
 import CompanySetup from './components/CompanySetup';
 import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { useAuth, loginWithRedirect, logout } from 'zitejs/auth';
@@ -79,7 +80,7 @@ export default function App() {
   const loadCompany = () => getMyCompany({}).then((r) => setCompany(r.company)).catch(() => setCompany(null));
   useEffect(() => {
     if (!isLoading && !user) loginWithRedirect();
-    if (user) loadCompany();
+    if (user) { loadCompany(); loadCatalog().catch(() => {}); }
   }, [isLoading, user]);
 
   if (isLoading || !user || company === undefined)

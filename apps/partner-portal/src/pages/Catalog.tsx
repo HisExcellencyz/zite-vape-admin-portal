@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getCatalog, GetCatalogOutputType } from 'zitejs/api';
+import { GetCatalogOutputType } from 'zitejs/api';
+import { loadCatalog } from '../lib/catalogCache';
 import { Input } from '@project/components/ui/input';
 import { Button } from '@project/components/ui/button';
 import { Skeleton } from '@project/components/ui/skeleton';
@@ -18,7 +19,7 @@ function ProductCard({ p, inCart, onAdd }: { p: Product; inCart: number; onAdd: 
   return (
     <div className="tile bg-card border border-border rounded-lg p-1.5 flex flex-col text-[0.75rem]">
       <div className="aspect-[16/15] rounded-md bg-muted overflow-hidden flex items-center justify-center">
-        {p.imageUrl ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" /> : <Package className="h-10 w-10 text-muted-foreground/50" />}
+        {p.imageUrl ? <img src={p.imageUrl} alt={p.name} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <Package className="h-10 w-10 text-muted-foreground/50" />}
       </div>
       <div className="text-[0.7rem] text-muted-foreground mt-1.5 font-mono">SKU {p.sku}</div>
       <div className="text-xs font-medium leading-snug line-clamp-2">{p.name}</div>
@@ -44,7 +45,7 @@ function ProductRow({ p, inCart, onAdd }: { p: Product; inCart: number; onAdd: (
   return (
     <div className="tile bg-card border border-border rounded-lg p-2 flex items-center gap-3 text-sm">
       <div className="h-12 w-12 shrink-0 rounded-md bg-muted overflow-hidden flex items-center justify-center">
-        {p.imageUrl ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" /> : <Package className="h-5 w-5 text-muted-foreground/50" />}
+        {p.imageUrl ? <img src={p.imageUrl} alt={p.name} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <Package className="h-5 w-5 text-muted-foreground/50" />}
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-medium truncate">{p.name}</div>
@@ -72,7 +73,7 @@ export default function Catalog() {
   const { cart, setCart } = useCart();
 
   useEffect(() => {
-    getCatalog({}).then(setData).catch((e) => setError(e.message || 'Could not load catalog'));
+    loadCatalog().then(setData).catch((e) => setError(e.message || 'Could not load catalog'));
   }, []);
 
   const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])].sort(), [data]);
