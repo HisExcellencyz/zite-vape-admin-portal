@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { GetCatalogOutputType } from 'zitejs/api';
+import { SearchInput, matchesQuery } from '@project/components/search';
 import { loadCatalog } from '../lib/catalogCache';
 import { Input } from '@project/components/ui/input';
 import { Button } from '@project/components/ui/button';
@@ -78,9 +79,8 @@ export default function Catalog() {
 
   const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])].sort(), [data]);
   const filtered = useMemo(() => {
-    const s = q.toLowerCase();
     return (data?.products ?? []).filter(
-      (p) => (cat === 'all' || p.category === cat) && (!s || p.name.toLowerCase().includes(s) || p.sku.toLowerCase().includes(s)),
+      (p) => (cat === 'all' || p.category === cat) && matchesQuery([p.name, p.sku, p.category], q),
     );
   }, [data, q, cat]);
 
@@ -95,10 +95,7 @@ export default function Catalog() {
         <p className="text-xs text-muted-foreground">Browse the full product catalog.</p>
         </div>
       <div className="flex flex-col sm:flex-row gap-2 flex-1">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Search by name or SKU…" value={q} onChange={(e) => setQ(e.target.value)} />
-        </div>
+        <SearchInput className="flex-1" placeholder="Search by name, SKU or category…" value={q} onChange={setQ} />
         <Select value={cat} onValueChange={setCat}>
           <SelectTrigger className="sm:w-48"><SelectValue /></SelectTrigger>
           <SelectContent>

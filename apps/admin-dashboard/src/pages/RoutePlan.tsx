@@ -3,6 +3,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { getDirectory, GetDirectoryOutputType } from 'zitejs/api';
 import { Button } from '@project/components/ui/button';
 import { Input } from '@project/components/ui/input';
+import { SearchInput, matchesQuery } from '@project/components/search';
 import { Label } from '@project/components/ui/label';
 import { Checkbox } from '@project/components/ui/checkbox';
 import { Switch } from '@project/components/ui/switch';
@@ -48,7 +49,7 @@ export default function RoutePlan() {
     }).catch(() => toast.error('Failed to load Google Maps'));
   }, [apiKey]);
 
-  const list = useMemo(() => (customers ?? []).filter((c) => !q || c.company.toLowerCase().includes(q.toLowerCase())), [customers, q]);
+  const list = useMemo(() => (customers ?? []).filter((c) => matchesQuery([c.company, c.address, c.email, (c as any).phone], q)), [customers, q]);
   const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else if (n.size < MAX_STOPS) n.add(id); else toast.error(`Up to ${MAX_STOPS} stops per route`); return n; });
   const allOn = list.length > 0 && list.every((c) => picked.has(c.id));
 
@@ -135,7 +136,7 @@ export default function RoutePlan() {
           <div className="bg-card border border-border rounded-lg p-3">
             <div className="flex items-center justify-between mb-2"><Label>Customers ({picked.size}/{MAX_STOPS})</Label>
               <button className="text-xs text-primary" onClick={() => setPicked(allOn ? new Set() : new Set(list.slice(0, MAX_STOPS).map((c) => c.id)))}>{allOn ? 'Clear' : 'Select all'}</button></div>
-            <Input className="mb-2" placeholder="Search customers…" value={q} onChange={(e) => setQ(e.target.value)} />
+            <SearchInput className="mb-2" placeholder="Search customers…" value={q} onChange={setQ} />
             <div className="max-h-72 overflow-y-auto space-y-1">
               {!customers && <Loader2 className="h-4 w-4 animate-spin mx-auto my-4 text-muted-foreground" />}
               {customers?.length === 0 && <p className="text-sm text-muted-foreground p-2">No customers have an address or pin yet.</p>}

@@ -1,5 +1,5 @@
 import { useMemo, useState, ReactNode } from 'react';
-import { Input } from '@project/components/ui/input';
+import { SearchInput, matchesQuery } from '@project/components/search';
 import HeaderTools from './HeaderTools';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@project/components/ui/select';
 import { Button } from '@project/components/ui/button';
@@ -39,8 +39,8 @@ export default function SimpleTable<T extends { id: string }>({ rows, cols, load
   const view = noViewToggle ? 'list' : storedView;
 
   const filtered = useMemo(() => {
-    const s = q.toLowerCase();
-    let r = rows.filter((x) => !s || searchKeys.some((k) => String(x[k] ?? '').toLowerCase().includes(s)));
+    // Every word must match one of the searchable columns; phone numbers match in any format.
+    let r = rows.filter((x) => matchesQuery(searchKeys.map((k) => x[k]), q));
     if (sort) r = [...r].sort((a, b) => {
       const x = a[sort.key], y = b[sort.key];
       if (x == null || x === '') return 1; if (y == null || y === '') return -1;
@@ -62,7 +62,7 @@ export default function SimpleTable<T extends { id: string }>({ rows, cols, load
     <div>
       <HeaderTools>
         <div className="flex items-center gap-3 w-full">
-          <Input className="max-w-sm h-9" placeholder="Search…" value={q} onChange={(e) => { setQ(e.target.value); setPage(0); }} />
+          <SearchInput className="max-w-sm" placeholder="Search…" value={q} onChange={(v) => { setQ(v); setPage(0); }} />
           <div className="ml-auto flex items-center gap-2">
             {tools}
             <Select value={sort ? `${String(sort.key)}:${sort.dir}` : 'none'} onValueChange={(v) => { if (v === 'none') return setSort(null); const [k, d] = v.split(':'); setSort({ key: k as keyof T, dir: Number(d) as 1 | -1 }); }}>

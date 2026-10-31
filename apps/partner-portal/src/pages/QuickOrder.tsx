@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDraft, saveOrder, GetCatalogOutputType } from 'zitejs/api';
+import { SearchInput, matchesQuery } from '@project/components/search';
 import { loadCatalog, clearCatalog } from '../lib/catalogCache';
 import { Input } from '@project/components/ui/input';
 import { Button } from '@project/components/ui/button';
@@ -30,8 +31,7 @@ export default function QuickOrder() {
   }, []);
 
   const rows = useMemo(() => {
-    const s = q.toLowerCase();
-    return (data?.products ?? []).filter((p) => !s || p.name.toLowerCase().includes(s) || p.sku.toLowerCase().includes(s));
+    return (data?.products ?? []).filter((p) => matchesQuery([p.name, p.sku, p.category], q));
   }, [data, q]);
 
   const priceMap = useMemo(() => new Map(data?.products.map((p) => [p.id, p]) ?? []), [data]);
@@ -71,10 +71,7 @@ export default function QuickOrder() {
           <h1 className="text-2xl font-extrabold leading-tight text-gradient">Quick Order</h1>
           <p className="text-xs text-muted-foreground">Enter quantities down the list, then submit the whole order.</p>
         </div>
-        <div className="relative sm:w-72">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Filter list…" value={q} onChange={(e) => setQ(e.target.value)} />
-        </div>
+        <SearchInput className="sm:w-72" placeholder="Filter by name, SKU or category…" value={q} onChange={setQ} />
       </div>
       <div className="bg-card border border-border rounded-lg overflow-auto max-h-[70vh]">
         <table className="w-full text-sm">
