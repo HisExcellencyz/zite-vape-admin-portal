@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { createEndpoint } from 'zitejs/backend';
 import { zite } from 'zitejs/db';
 
+const count = (v: string | string[] | undefined) => (v == null ? 0 : Array.isArray(v) ? v.length : v ? 1 : 0);
+
 export default createEndpoint({
   description: 'Lists all products and customers for management tables',
   inputSchema: z.object({}),
@@ -28,6 +30,8 @@ export default createEndpoint({
         address: x.shippingAddress ?? '', balance: x.totalBalance ?? 0,
         phone: x.phone ?? '', orders: stat.get(x.id)?.orders ?? 0, revenue: stat.get(x.id)?.revenue ?? 0,
         lat: x.latitude ?? null, lng: x.longitude ?? null, plusCode: x.plusCode ?? '',
+        /** How many Partner Portal sign-ins are linked to this company (0 = added by an admin, not yet signed in). */
+        portalUsers: count(x.portalUsers),
       })),
     };
   },
