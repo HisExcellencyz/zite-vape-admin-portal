@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { createEndpoint } from 'zitejs/backend';
 import { zite } from 'zitejs/db';
+import { normalizePath } from '@project/components/category-tree/paths';
 
 export default createEndpoint({
   description: 'Creates, updates or deletes a product',
@@ -20,7 +21,7 @@ export default createEndpoint({
     }
     const d = input.data!;
     const record = {
-      sku: d.sku, productName: d.name, category: d.category, basePrice: d.basePrice, costPrice: d.costPrice, rrp: d.rrp,
+      sku: d.sku, productName: d.name, category: normalizePath(d.category), basePrice: d.basePrice, costPrice: d.costPrice, rrp: d.rrp,
       stockLevel: d.stock, availabilityStatus: d.status,
       image: d.imageUrl ? [d.imageUrl] : [],
     } as never;
