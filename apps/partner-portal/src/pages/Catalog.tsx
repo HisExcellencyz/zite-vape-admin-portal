@@ -2,13 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { GetCatalogOutputType } from 'zitejs/api';
 import { SearchInput, matchesQuery } from '@project/components/search';
 import { loadCatalog } from '../lib/catalogCache';
-import { Input } from '@project/components/ui/input';
 import { Button } from '@project/components/ui/button';
 import { Skeleton } from '@project/components/ui/skeleton';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@project/components/ui/select';
-import { Package, Search, Plus, Check, LayoutGrid, List } from 'lucide-react';
+import { Package, Plus, Check, LayoutGrid, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCart, money } from '../lib/cart';
+import CategoryRibbon from '../components/CategoryRibbon';
 
 type Product = GetCatalogOutputType['products'][0];
 
@@ -16,23 +15,31 @@ export function ErrorState({ message }: { message: string }) {
   return <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">{message}</div>;
 }
 
+/**
+ * Grid tile: square picture (the whole photo shows), name, price and the add button.
+ * Every tile in a row is the same height and the button sits at the bottom, so all buttons line up.
+ */
 function ProductCard({ p, inCart, onAdd }: { p: Product; inCart: number; onAdd: () => void }) {
   return (
-    <div className="tile bg-card border border-border rounded-lg p-1.5 flex flex-col text-[0.75rem]">
-      <div className="aspect-[16/15] rounded-md bg-muted overflow-hidden flex items-center justify-center">
-        {p.imageUrl ? <img src={p.imageUrl} alt={p.name} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <Package className="h-10 w-10 text-muted-foreground/50" />}
+    <div className="tile bg-card border border-border rounded-xl p-2 flex flex-col h-full text-sm">
+      <div className="aspect-square rounded-lg bg-white/90 dark:bg-muted overflow-hidden flex items-center justify-center">
+        {p.imageUrl
+          ? <img src={p.imageUrl} alt={p.name} loading="lazy" decoding="async" className="w-full h-full object-contain" />
+          : <Package className="h-12 w-12 text-muted-foreground/50" />}
       </div>
-      <div className="text-[0.7rem] text-muted-foreground mt-1.5 font-mono">SKU {p.sku}</div>
-      <div className="text-xs font-medium leading-snug line-clamp-2">{p.name}</div>
-      <div className="flex justify-between items-end mt-1 text-xs">
-        <span className="flex flex-col">
-          <span className="font-semibold">{money(p.price)}</span>
-          {p.rrp != null && <span className="text-[0.7rem] text-muted-foreground">RRP {money(p.rrp)}</span>}
-        </span>
-        <span className="text-xs text-muted-foreground">{p.orderable ? `${p.stock.toLocaleString()} in stock` : 'Out of stock'}</span>
+      <div className="mt-2 font-medium leading-snug line-clamp-2 min-h-[2.6em]" title={p.name}>{p.name}</div>
+      <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+        <span className="font-bold">{money(p.price)}</span>
+        {p.rrp != null && <span className="text-xs text-muted-foreground">RRP {money(p.rrp)}</span>}
       </div>
-      <Button className={`mt-2 h-8 text-xs ${p.orderable ? 'bg-[hsl(var(--chart-3))] text-white hover:bg-[hsl(var(--chart-3)/0.85)]' : ''}`} size="sm" disabled={!p.orderable || inCart >= p.stock} onClick={onAdd} variant={p.orderable ? 'default' : 'secondary'}>
-        {!p.orderable ? 'Unavailable' : inCart > 0 ? <><Check className="h-4 w-4 mr-1" />{inCart} in order · add 1</> : <><Plus className="h-4 w-4 mr-1" />Add to order</>}
+      <Button
+        className={`mt-auto w-full h-9 text-xs ${p.orderable ? 'bg-[hsl(var(--chart-3))] text-white hover:bg-[hsl(var(--chart-3)/0.85)]' : ''}`}
+        size="sm"
+        disabled={!p.orderable || inCart >= p.stock}
+        onClick={onAdd}
+        variant={p.orderable ? 'default' : 'secondary'}
+      >
+        {!p.orderable ? 'Out of stock' : inCart > 0 ? <><Check className="h-4 w-4 mr-1" />{inCart} in order · add 1</> : <><Plus className="h-4 w-4 mr-1" />Add to order</>}
       </Button>
     </div>
   );
@@ -70,7 +77,7 @@ export default function Catalog() {
   const [data, setData] = useState<GetCatalogOutputType | null>(null);
   const [error, setError] = useState('');
   const [q, setQ] = useState('');
-  const [cat, setCat] = useState('all');
+  const [cat, setCat] = useState<string | null>(null);
   const { cart, setCart } = useCart();
 
   useEffect(() => {
@@ -80,7 +87,7 @@ export default function Catalog() {
   const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])].sort(), [data]);
   const filtered = useMemo(() => {
     return (data?.products ?? []).filter(
-      (p) => (cat === 'all' || p.category === cat) && matchesQuery([p.name, p.sku, p.category], q),
+      (p) => (!cat || p.category === cat) && matchesQuery([p.name, p.sku, p.category], q),
     );
   }, [data, q, cat]);
 
@@ -88,31 +95,25 @@ export default function Catalog() {
 
   return (
     <div>
-      <div className="page-header sticky top-[4.5rem] z-10 -mt-4 px-4 sm:px-5 py-3 rounded-2xl border mb-4">
+      <div className="page-header sticky top-[4.5rem] z-10 -mt-4 px-4 sm:px-5 py-3 rounded-2xl border mb-3 space-y-2.5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
-        <div className="shrink-0">
-        <h1 className="text-2xl font-extrabold leading-tight text-gradient">{data ? `Welcome, ${data.companyName}` : 'Catalog'}</h1>
-        <p className="text-xs text-muted-foreground">Browse the full product catalog.</p>
+          <div className="shrink-0">
+            <h1 className="text-2xl font-extrabold leading-tight text-gradient">{data ? `Welcome, ${data.companyName}` : 'Catalog'}</h1>
+            <p className="text-xs text-muted-foreground">Browse the full product catalog.</p>
+          </div>
+          <div className="flex gap-2 flex-1">
+            <SearchInput className="flex-1" placeholder="Search by name, SKU or category…" value={q} onChange={setQ} />
+            <div className="flex rounded-md border border-border p-0.5 shrink-0">
+              <Button size="icon" variant={view === 'grid' ? 'default' : 'ghost'} className="h-8 w-8" onClick={() => changeView('grid')} aria-label="Grid view"><LayoutGrid className="h-4 w-4" /></Button>
+              <Button size="icon" variant={view === 'list' ? 'default' : 'ghost'} className="h-8 w-8" onClick={() => changeView('list')} aria-label="List view"><List className="h-4 w-4" /></Button>
+            </div>
+          </div>
         </div>
-      <div className="flex flex-col sm:flex-row gap-2 flex-1">
-        <SearchInput className="flex-1" placeholder="Search by name, SKU or category…" value={q} onChange={setQ} />
-        <Select value={cat} onValueChange={setCat}>
-          <SelectTrigger className="sm:w-48"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
-            {categories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <div className="flex rounded-md border border-border p-0.5 self-start">
-          <Button size="icon" variant={view === 'grid' ? 'default' : 'ghost'} className="h-8 w-8" onClick={() => changeView('grid')} aria-label="Grid view"><LayoutGrid className="h-4 w-4" /></Button>
-          <Button size="icon" variant={view === 'list' ? 'default' : 'ghost'} className="h-8 w-8" onClick={() => changeView('list')} aria-label="List view"><List className="h-4 w-4" /></Button>
-        </div>
+        <CategoryRibbon categories={categories} selected={cat} onSelect={setCat} />
       </div>
-      </div>
-      </div>
-      <div aria-hidden className="h-[18vh] sm:h-[26vh]" />
-      <div className={view === 'grid' ? 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2.5' : 'space-y-2'}>
-        {!data && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className={view === 'grid' ? 'h-60 rounded-lg' : 'h-16 rounded-lg'} />)}
+      {/* Tiles are 50% wider than before (up to 5 per row instead of 8) */}
+      <div className={view === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3' : 'space-y-2'}>
+        {!data && Array.from({ length: 10 }).map((_, i) => <Skeleton key={i} className={view === 'grid' ? 'h-80 rounded-xl' : 'h-16 rounded-lg'} />)}
         {filtered.map((p) => (
           <ProductTile view={view} key={p.id} p={p} inCart={cart[p.id] ?? 0}
             onAdd={() => { setCart({ ...cart, [p.id]: (cart[p.id] ?? 0) + 1 }); toast.success(`${p.name} added to Quick Order`); }} />
