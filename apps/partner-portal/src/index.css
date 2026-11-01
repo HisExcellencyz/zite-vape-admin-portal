@@ -337,3 +337,27 @@
   .stat-tile, .tile[data-tone] { --edge-from: var(--glow); }
   .bg-card.border:hover, .tile:hover, .stat-tile:hover { --edge-a: 1; }
 }
+/* Opaque headers (2026-11-01): product tiles scrolling up no longer show through or around the
+   top menu bar or the page bar under it (catalog search, Quick Order, My Orders). */
+@layer components {
+  /* A solid band behind the whole sticky menu, including the space around the rounded bar */
+  header.sticky {
+    background-color: hsl(var(--background));
+    padding-bottom: 0.75rem;
+  }
+  /* The menu bar itself: solid instead of frosted glass */
+  header.sticky .glass {
+    background-color: hsl(var(--card));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* The page bar: solid, docked right under the menu (which is 5rem tall now), with a solid ring
+     of page colour around it so nothing shows in the gap or behind its rounded corners */
+  .page-header {
+    top: 5rem !important;
+    background-color: hsl(var(--card)) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 0 0 0.75rem hsl(var(--background)) !important;
+  }
+}
