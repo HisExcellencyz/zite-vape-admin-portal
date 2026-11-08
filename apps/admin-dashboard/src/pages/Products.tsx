@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDirectory, saveProduct, importProducts, GetDirectoryOutputType } from 'zitejs/api';
 import { useUpload } from 'zitejs/upload';
 import { z } from 'zod';
@@ -14,6 +14,8 @@ import ImportButton from '../components/ImportButton';
 import { toast } from 'sonner';
 import PageHeader from '../components/PageHeader';
 import SimpleTable from '../components/SimpleTable';
+import HeaderTools from '../components/HeaderTools';
+import CategoryRibbon, { inCategory } from '@project/components/category-tree';
 import { money, exportRows, Fmt, pick, num } from '../lib/util';
 
 type P = GetDirectoryOutputType['products'][0];
@@ -80,7 +82,7 @@ function ProductDialog({ initial, onClose, onSaved, cats }: { initial: P | 'new'
               <SelectTrigger><SelectValue placeholder="Choose category" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="__none">No category</SelectItem>
-                {cats.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+                {cats.map((c) => <SelectItem key={c.name} value={c.name}><span style={{ paddingLeft: c.depth * 12 }}>{c.label}</span></SelectItem>)}
                 {f.category && !cats.some((c) => c.name === f.category) && <SelectItem value={f.category}>{f.category}</SelectItem>}
               </SelectContent>
             </Select></div>
@@ -110,6 +112,10 @@ export default function Products() {
   const [edit, setEdit] = useState<P | 'new' | null>(null);
   const [catsOpen, setCatsOpen] = useState(false);
   const cats = useCategories();
+  // Category ribbon: the chosen category and everything under it.
+  const [cat, setCat] = useState<string | null>(null);
+  const ribbonCats = useMemo(() => [...cats.list.map((c) => c.name), ...(rows ?? []).map((p) => p.category)], [cats.list, rows]);
+  const shown = useMemo(() => (rows ?? []).filter((p) => inCategory(p.category, cat)), [rows, cat]);
   const load = useCallback(() => getDirectory({}).then((d) => setRows(d.products)).catch((e) => toast.error(e.message)), []);
   useEffect(() => { load(); }, [load]);
 
@@ -136,7 +142,7 @@ export default function Products() {
     <div>
       <PageHeader title="Products">
           <ImportButton label="Import" templateName="product-catalog" onRows={doImport} columns={COLUMNS}
-            hint="Existing products with the same SKU are updated. Image URL is optional."
+            hint="Existing products with the same SKU are updated. Image URL is optional. For a subcategory write the path, e.g. Vapes > Disposables."
             sampleRows={[
               { SKU: 'GS-001', 'Product Name': 'Example Device', Category: 'Devices', 'Cost Price': 1800, 'Selling Price': 2500, RRP: 3200, 'Stock Level': 100, Status: 'Available', 'Image URL': '' },
               { SKU: 'GS-002', 'Product Name': 'Example Refill Pack', Category: 'Accessories', 'Cost Price': 600, 'Selling Price': 950, RRP: 1200, 'Stock Level': 250, Status: 'Available', 'Image URL': '' },
@@ -144,7 +150,8 @@ export default function Products() {
           <ExportMenu label="Export" disabled={!rows?.length} onExport={doExport} />
           <Button onClick={() => setEdit('new')} className="bg-[hsl(var(--chart-3))] text-white hover:bg-[hsl(var(--chart-3)/0.85)]"><Plus className="h-4 w-4 mr-2" />Add product</Button>
       </PageHeader>
-      <SimpleTable tools={<Button variant="outline" className="h-9 border-[hsl(var(--primary))] text-[hsl(var(--primary))]" onClick={() => setCatsOpen(true)}><Tags className="h-4 w-4 mr-2" />Categories</Button>} viewKey="products" image={(p) => p.imageUrl || null} rows={(rows ?? []).map((p) => ({ ...p, margin: p.basePrice > 0 ? ((p.basePrice - p.costPrice) / p.basePrice) * 100 : 0 }))} loading={!rows} searchKeys={['sku', 'name', 'category']} onEdit={({ margin: _m, ...r }) => setEdit(r)}
+      <HeaderTools><CategoryRibbon categories={ribbonCats} selected={cat} onSelect={setCat} /></HeaderTools>
+      <SimpleTable tools={<Button variant="outline" className="h-9 border-[hsl(var(--primary))] text-[hsl(var(--primary))]" onClick={() => setCatsOpen(true)}><Tags className="h-4 w-4 mr-2" />Categories</Button>} viewKey="products" image={(p) => p.imageUrl || null} rows={shown.map((p) => ({ ...p, margin: p.basePrice > 0 ? ((p.basePrice - p.costPrice) / p.basePrice) * 100 : 0 }))} loading={!rows} searchKeys={['sku', 'name', 'category']} onEdit={({ margin: _m, ...r }) => setEdit(r)}
         onDelete={async (p) => { setRows((r) => r?.filter((x) => x.id !== p.id) ?? null); try { await saveProduct({ id: p.id, delete: true }); toast.success('Deleted'); } catch { toast.error('Delete failed'); load(); } }}
         cols={[
           { key: 'name', label: 'Name' },
