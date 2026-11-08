@@ -7,7 +7,7 @@ import { Skeleton } from '@project/components/ui/skeleton';
 import { Package, Plus, Check, LayoutGrid, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCart, money } from '../lib/cart';
-import CategoryRibbon from '../components/CategoryRibbon';
+import CategoryRibbon, { inCategory } from '@project/components/category-tree';
 
 type Product = GetCatalogOutputType['products'][0];
 
@@ -84,10 +84,12 @@ export default function Catalog() {
     loadCatalog().then(setData).catch((e) => setError(e.message || 'Could not load catalog'));
   }, []);
 
-  const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])].sort(), [data]);
+  // Category paths ("Vapes > Disposables > Elf Bar"); the ribbon builds the levels from them.
+  const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])], [data]);
   const filtered = useMemo(() => {
     return (data?.products ?? []).filter(
-      (p) => (!cat || p.category === cat) && matchesQuery([p.name, p.sku, p.category], q),
+      // A chosen category also shows the products in every subcategory under it.
+      (p) => inCategory(p.category, cat) && matchesQuery([p.name, p.sku, p.category], q),
     );
   }, [data, q, cat]);
 

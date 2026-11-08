@@ -11,11 +11,13 @@ import { toast } from 'sonner';
 import { useCart, money, orderCode } from '../lib/cart';
 import { ErrorState } from './Catalog';
 import DocDownload from '@project/components/documents';
+import CategoryRibbon, { inCategory } from '@project/components/category-tree';
 
 export default function QuickOrder() {
   const [data, setData] = useState<GetCatalogOutputType | null>(null);
   const [error, setError] = useState('');
   const [q, setQ] = useState('');
+  const [cat, setCat] = useState<string | null>(null);
   const [busy, setBusy] = useState<'' | 'draft' | 'submit'>('');
   const { cart, setCart } = useCart();
   const navigate = useNavigate();
@@ -31,8 +33,9 @@ export default function QuickOrder() {
   }, []);
 
   const rows = useMemo(() => {
-    return (data?.products ?? []).filter((p) => matchesQuery([p.name, p.sku, p.category], q));
-  }, [data, q]);
+    return (data?.products ?? []).filter((p) => inCategory(p.category, cat) && matchesQuery([p.name, p.sku, p.category], q));
+  }, [data, q, cat]);
+  const categories = useMemo(() => [...new Set(data?.products.map((p) => p.category) ?? [])], [data]);
 
   const priceMap = useMemo(() => new Map(data?.products.map((p) => [p.id, p]) ?? []), [data]);
   const lines = Object.entries(cart).filter(([id]) => priceMap.has(id));
@@ -66,12 +69,15 @@ export default function QuickOrder() {
 
   return (
     <div className="pb-28">
-      <div className="page-header sticky top-[4.5rem] z-10 -mt-4 px-4 sm:px-5 py-3 rounded-2xl border flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
-        <div>
-          <h1 className="text-2xl font-extrabold leading-tight text-gradient">Quick Order</h1>
-          <p className="text-xs text-muted-foreground">Enter quantities down the list, then submit the whole order.</p>
+      <div className="page-header sticky top-[4.5rem] z-10 -mt-4 px-4 sm:px-5 py-3 rounded-2xl border mb-4 space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold leading-tight text-gradient">Quick Order</h1>
+            <p className="text-xs text-muted-foreground">Enter quantities down the list, then submit the whole order.</p>
+          </div>
+          <SearchInput className="sm:w-72" placeholder="Filter by name, SKU or category…" value={q} onChange={setQ} />
         </div>
-        <SearchInput className="sm:w-72" placeholder="Filter by name, SKU or category…" value={q} onChange={setQ} />
+        <CategoryRibbon categories={categories} selected={cat} onSelect={setCat} />
       </div>
       <div className="bg-card border border-border rounded-lg overflow-auto max-h-[70vh]">
         <table className="w-full text-sm">
