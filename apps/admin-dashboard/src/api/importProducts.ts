@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { createEndpoint } from 'zitejs/backend';
 import { zite } from 'zitejs/db';
+import { normalizePath } from '@project/components/category-tree/paths';
 
 export default createEndpoint({
   description: 'Imports products from a spreadsheet, updating existing ones by SKU',
@@ -17,7 +18,8 @@ export default createEndpoint({
       await zite.products.bulkCreate({
         matchOn: ['sku'] as never,
         records: rows.slice(i, i + 100).map((p) => ({
-          sku: p.sku.trim(), productName: p.name, category: p.category,
+          // Category paths like "Vapes>Pods" are tidied to "Vapes > Pods" (multi-level categories).
+          sku: p.sku.trim(), productName: p.name, category: normalizePath(p.category),
           basePrice: p.basePrice, stockLevel: p.stock,
           ...(p.costPrice != null ? { costPrice: p.costPrice } : {}), ...(p.rrp != null ? { rrp: p.rrp } : {}),
           ...(p.imageUrl ? { image: [p.imageUrl] } : {}),

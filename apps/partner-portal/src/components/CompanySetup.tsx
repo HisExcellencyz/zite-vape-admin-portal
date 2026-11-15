@@ -10,13 +10,15 @@ import { toast } from 'sonner';
 
 export default function CompanySetup({ email, onDone }: { email: string; onDone: () => void }) {
   const [company, setCompany] = useState('');
+  const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [loc, setLoc] = useState<LocationValue>({ lat: null, lng: null, plusCode: '' });
   const [busy, setBusy] = useState(false);
 
   const submit = async () => {
+    if (busy) return;
     setBusy(true);
-    try { await registerCompany({ company, address, ...loc }); toast.success('Welcome aboard!'); onDone(); }
+    try { await registerCompany({ company, phone, address, ...loc }); toast.success('Welcome aboard!'); onDone(); }
     catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
   };
 
@@ -29,6 +31,8 @@ export default function CompanySetup({ email, onDone }: { email: string; onDone:
       </div>
       <div><Label>Company name</Label><Input value={company} onChange={(e) => setCompany(e.target.value)} />
         {!company.trim() && <p className="text-xs text-muted-foreground mt-1">Required</p>}</div>
+      <div><Label>Phone number</Label><Input type="tel" placeholder="+254 7XX XXX XXX" value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <p className="text-xs text-muted-foreground mt-1">The number we have for your business helps us connect your account to it.</p></div>
       <div><Label>Shipping address</Label><Textarea value={address} onChange={(e) => setAddress(e.target.value)} /></div>
       <div><Label>Location pin <span className="text-muted-foreground font-normal">(optional)</span></Label>
         <LocationPicker value={loc} onChange={setLoc} onAddress={(a) => setAddress((p) => p || a)} /></div>
